@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,6 +8,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Info")]
     [SerializeField]private float _walkSpeed;
     private Vector3 movementDirection;
+    private float _gravityScale = 9.81f;
+
+    private float verticalVelocity;
 
     private Vector2 _moveInput;
     private Vector2 _aimInput;
@@ -42,11 +40,24 @@ public class PlayerMovement : MonoBehaviour
     private void ApplyMovement()
     {
         movementDirection = new Vector3(_moveInput.x, 0, _moveInput.y);
+        ApplyGravity();
 
         if (movementDirection.magnitude > 0)
         {
             _characterController.Move(movementDirection * Time.deltaTime * _walkSpeed);
         }
+    }
+
+    private void ApplyGravity()
+    {
+        if (!_characterController.isGrounded)
+        {
+            verticalVelocity -= _gravityScale * Time.deltaTime;
+            movementDirection.y = verticalVelocity;
+        }
+        else
+            verticalVelocity = -.5f;
+
     }
 
     private void OnEnable()
