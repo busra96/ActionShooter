@@ -9,8 +9,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float _walkSpeed;
     private Vector3 movementDirection;
     private float _gravityScale = 9.81f;
-
     private float verticalVelocity;
+
+    [Header("Aim Info")]
+    [SerializeField] private Transform _aim;
+    [SerializeField] private LayerMask _aimLayerMask;
+    private Vector3 _lookingDirection;
 
     private Vector2 _moveInput;
     private Vector2 _aimInput;
@@ -35,6 +39,24 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         ApplyMovement();
+
+        AimTowardMouse();
+    }
+
+    private void AimTowardMouse()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(_aimInput);
+
+        if (Physics.Raycast(ray, out var hitInfo, Mathf.Infinity, _aimLayerMask))
+        {
+            _lookingDirection = hitInfo.point - transform.position;
+            _lookingDirection.y = 0f;
+            _lookingDirection.Normalize();
+
+            transform.forward = _lookingDirection;
+
+            _aim.position = new Vector3(hitInfo.point.x, transform.position.y, hitInfo.point.z);
+        }
     }
 
     private void ApplyMovement()
