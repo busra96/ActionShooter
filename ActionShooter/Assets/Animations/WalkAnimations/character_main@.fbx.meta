@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c7f0c7d1426add4449096f52a2377d88
+guid: 3a36ef962fc1d974b9eca9f28a995b04
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Rifle Walk Backward
+      name: Rifle Aiming Idle
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 30
+      lastFrame: 88
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -106,7 +106,11 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips: []
+  referencedClips:
+  - c7f0c7d1426add4449096f52a2377d88
+  - b9d81cee4c3d68e428fce6f4b61157a3
+  - d2f8bbeeea686c541b1638f374e3a0b8
+  - a8045a0ef7ea7fb4d8078c2a998d1bce
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
@@ -533,11 +537,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 3a36ef962fc1d974b9eca9f28a995b04, type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 2
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
