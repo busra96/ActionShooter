@@ -6,11 +6,14 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _characterController;
     private Animator _animator;
 
-    [Header("Movement Info")]
+    [Header("Movement Info")] 
     [SerializeField]private float _walkSpeed;
+    [SerializeField]private float _runSpeed;
+    private float _speed;
     private Vector3 movementDirection;
     private float _gravityScale = 9.81f;
     private float verticalVelocity;
+    private bool _isRunning;
 
     [Header("Aim Info")]
     [SerializeField] private Transform _aim;
@@ -22,20 +25,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
-        _controls = new PlayerControlls();
-
-        _controls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
-        _controls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
-
-        _controls.Character.Aim.performed += context => _aimInput = context.ReadValue<Vector2>();
-        _controls.Character.Aim.canceled += context => _aimInput = Vector2.zero;
-
+        AssignInputEvents();
     }
+
+   
 
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
+
+        _speed = _walkSpeed;
     }
 
     private void Update()
@@ -55,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
         
         _animator.SetFloat("xVelocity", xVelocity, .1f, Time.deltaTime);
         _animator.SetFloat("zVelocity", zVelocity, .1f, Time.deltaTime);
+
+        bool playRunAnimation = _isRunning && movementDirection.magnitude > 0;
+        _animator.SetBool("isRunning", playRunAnimation);
     }
 
     private void AimTowardMouse()
@@ -80,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (movementDirection.magnitude > 0)
         {
-            _characterController.Move(movementDirection * Time.deltaTime * _walkSpeed);
+            _characterController.Move(movementDirection * Time.deltaTime * _speed);
         }
     }
 
@@ -96,12 +98,36 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        _controls.Enable();
-    }
-    private void OnDisable()
-    {
-        _controls.Disable();
-    }
+    #region New Input System
+        private void AssignInputEvents()
+        {
+            _animator = GetComponentInChildren<Animator>();
+            _controls = new PlayerControlls();
+
+            _controls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
+            _controls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
+
+            _controls.Character.Aim.performed += context => _aimInput = context.ReadValue<Vector2>();
+            _controls.Character.Aim.canceled += context => _aimInput = Vector2.zero;
+
+            _controls.Character.Run.performed += context =>
+            {
+                _isRunning = true;
+                _speed = _runSpeed;
+            };
+            _controls.Character.Run.canceled += context =>
+            {
+                _isRunning = true;
+                _speed = _walkSpeed;
+            };
+        }
+        private void OnEnable()
+        {
+            _controls.Enable();
+        }
+        private void OnDisable()
+        {
+            _controls.Disable();
+        }
+    #endregion
 }
