@@ -1700,6 +1700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _walkSpeed: 1.5
+  _runSpeed: 3
   _aim: {fileID: 132424279}
   _aimLayerMask:
     serializedVersion: 2
