@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private Player _player;
     private PlayerControlls _controls;
     private CharacterController _characterController;
     private Animator _animator;
@@ -22,18 +23,16 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 _moveInput;
     private Vector2 _aimInput;
-
-    private void Awake()
-    {
-        AssignInputEvents();
-    }
     
     private void Start()
     {
+        _player = GetComponent<Player>();
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponentInChildren<Animator>();
 
         _speed = _walkSpeed;
+        
+        AssignInputEvents();
     }
 
     private void Update()
@@ -44,13 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
         AnimController();
     }
-
-    private void Shoot()
-    {
-        _animator.SetTrigger("Fire");
-    }
-        
-
 
     private void AnimController()
     {
@@ -106,10 +98,8 @@ public class PlayerMovement : MonoBehaviour
     #region New Input System
         private void AssignInputEvents()
         {
-           
-            _controls = new PlayerControlls();
 
-            _controls.Character.Fire.performed += context => Shoot();
+            _controls = _player.Controlls;
 
             _controls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
             _controls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
@@ -128,13 +118,6 @@ public class PlayerMovement : MonoBehaviour
                 _speed = _walkSpeed;
             };
         }
-        private void OnEnable()
-        {
-            _controls.Enable();
-        }
-        private void OnDisable()
-        {
-            _controls.Disable();
-        }
+        
     #endregion
 }
