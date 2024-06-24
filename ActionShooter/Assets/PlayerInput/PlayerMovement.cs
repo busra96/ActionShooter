@@ -27,12 +27,11 @@ public class PlayerMovement : MonoBehaviour
     {
         AssignInputEvents();
     }
-
-   
-
+    
     private void Start()
     {
         _characterController = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
 
         _speed = _walkSpeed;
     }
@@ -45,6 +44,12 @@ public class PlayerMovement : MonoBehaviour
 
         AnimController();
     }
+
+    private void Shoot()
+    {
+        _animator.SetTrigger("Fire");
+    }
+        
 
 
     private void AnimController()
@@ -101,8 +106,10 @@ public class PlayerMovement : MonoBehaviour
     #region New Input System
         private void AssignInputEvents()
         {
-            _animator = GetComponentInChildren<Animator>();
+           
             _controls = new PlayerControlls();
+
+            _controls.Character.Fire.performed += context => Shoot();
 
             _controls.Character.Movement.performed += context => _moveInput = context.ReadValue<Vector2>();
             _controls.Character.Movement.canceled += context => _moveInput = Vector2.zero;
